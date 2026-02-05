@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+:root{
+    --index: calc(1vw + 1vh);
+    --transition: cubic-bezier(.1, .7, 0, 1);
+}
+body{
+    background-color: #60d1de;
+}
+
+.wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.items{
+    display: flex;/*将元素设置为Flexbox容器*/
+    gap: 0.4rem;
+    /*定义了Flexbox容器中项目之间的间距。间距被设置为0.4rem（rem是一个相对单位，相对于根元素的字体大小）。这意味着项目之间的间距将是0.4倍根元素的字体大小。*/
+    perspective: calc(var(--index) * 35);
+    /*透视效果，它会影响元素的3D变换效果。perspective属性的值越大，透视效果越明显。透视值是通过计算变量--index乘以35得到的。*/
+}
+.item{
+    width: calc(var(--index) * 3);
+    height: calc(var(--index) * 12);
+    background-color: #222;
+    background-size: cover;/*设置了背景图像的尺寸。cover值表示背景图像会被放大或缩小以填充整个元素，同时保持其原始比例。*/
+    background-position: center;/*设置了背景图像的位置。center值表示背景图像会居中显示在元素内部。*/
+    cursor: pointer;
+    filter: grayscale(1) brightness(.5);
+    /*元素的滤镜效果。grayscale(1)表示将图像转换为灰度图像，brightness(.5)表示降低图像的亮度。这两个滤镜效果一起使用可以产生一种暗调的效果。*/
+    transition: transform 1.25s var(--transition), filter 3s var(--transition), width 1.25s var(--transition);
+    will-change: transform, filter, rotateY, width;/*(变换、滤镜、旋转Y轴和宽度)告诉浏览器哪些属性可能会发生变化，以便浏览器提前进行优化*/
+}
+
+.item::before, .item::after{
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 20px;
+    right: calc(var(--index) * -1);
+}
+.item::after{
+    left: calc(var(--index) * -1);
+}
+
+.items .item:hover{
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 10));
+}
+/*Right*/
+.items .item:hover + *{
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 8.5)) rotateY(35deg);
+    z-index: -1;
+}
+
+.items .item:hover + * + *{
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 5.6)) rotateY(40deg);
+    z-index: -2;
+}
+
+.items .item:hover + * + * + *{
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 2.5)) rotateY(30deg);
+    z-index: -3;
+}
+.items .item:hover + * + * + * + *{
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * .6)) rotateY(15deg);
+    z-index: -4;
+}
+
+/*Left*/
+.items .item:has( + :hover){
+   filter: inherit;
+    transform: translateZ(calc(var(--index) * 8.5)) rotateY(-35deg);
+}
+.items .item:has( + * + :hover){
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 5.6)) rotateY(-40deg);
+}
+.items .item:has( + * + * + :hover){
+   filter: inherit;
+    transform: translateZ(calc(var(--index) * 2.5)) rotateY(-30deg);
+}
+.items .item:has( + * + * + * + :hover){
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * .6)) rotateY(-15deg);
+}
+.items .item:active, .items .item:focus {
+    width: 28vw;
+    filter: inherit;
+    z-index: 100;
+    transform: translateZ(calc(var(--index) * 10));
+    margin: 0 .45vw;
+}
